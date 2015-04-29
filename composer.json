@@ -1,0 +1,24 @@
+{
+    "name": "maxakawizard/json-collection-parser",
+    "description": "Streaming parser for large JSON files containing array of objects",
+    "keywords": ["json"],
+    "homepage": "https://github.com/MAXakaWIZARD/JsonCollectionParser",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Max Grigorian",
+            "email": "maxakawizard@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "salsify/json-streaming-parser": "~4.0"
+    },
+    "require-dev": {
+        "satooshi/php-coveralls": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {"JsonCollectionParser\\": "src/"}
+    }
+}

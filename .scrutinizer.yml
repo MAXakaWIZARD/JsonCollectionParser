@@ -1,0 +1,11 @@
+filter:
+    paths:
+        - src/*
+    excluded_paths:
+        - tests/*
+        - vendor/*
+
+tools:
+    php_code_sniffer:
+        config:
+            standard: "PSR2"

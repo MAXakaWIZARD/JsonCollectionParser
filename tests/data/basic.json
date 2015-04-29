@@ -1,0 +1,26 @@
+[
+  {
+    "id": 78,
+    "title": "Title",
+    "dealType": "sale",
+    "propertyType": "townhouse",
+    "properties": {
+      "bedroomsCount": 6,
+      "parking": "yes"
+    },
+    "photos": [
+      "1.jpg",
+      "2.jpg"
+    ]
+  },
+  {
+    "id": 729,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5165,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  }
+]
