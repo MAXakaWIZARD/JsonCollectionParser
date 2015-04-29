@@ -18,13 +18,43 @@ This package is compliant with [PSR-4](http://www.php-fig.org/psr/4/), [PSR-1](h
 If you notice compliance oversights, please send a patch via pull request.
 
 ## Usage
+Function as callback:
 ```php
-function processItem (array $item)
+function processItem(array $item)
 {
     print_r($item);
 }
 
-$parser = new \JsonStreamingParser\Parser('/path/to/file.json', 'processItem');
+$parser = new \JsonCollectionParser\Parser();
+$parser->parse('/path/to/file.json', 'processItem');
+```
+
+Static method as callback:
+```php
+class ItemProcessor {
+    public static function process(array $item)
+    {
+        print_r($item);
+    }
+}
+
+$parser = new \JsonCollectionParser\Parser();
+$parser->parse('/path/to/file.json', array('ItemProcessor', 'process'));
+```
+
+
+Instance method as callback:
+```php
+class ItemProcessor {
+    public function process(array $item)
+    {
+        print_r($item);
+    }
+}
+
+$parser = new \JsonCollectionParser\Parser();
+$processor = new \ItemProcessor();
+$parser->parse('/path/to/file.json', array($processor, 'process'));
 ```
 
 ## License
