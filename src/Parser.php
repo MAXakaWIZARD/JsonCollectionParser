@@ -4,8 +4,8 @@ namespace JsonCollectionParser;
 class Parser
 {
     /**
-     * @param $filePath
-     * @param $itemCallback
+     * @param string $filePath
+     * @param callable $itemCallback
      *
      * @throws \Exception
      */

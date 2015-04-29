@@ -34,7 +34,12 @@ class Listener implements \JsonStreamingParser_Listener
     protected $objectKeys;
 
     /**
-     * @param \Callable $callback the function called when a json object has been fully parsed
+     * @var callable
+     */
+    protected $callback;
+
+    /**
+     * @param callable $callback the function called when a json object has been fully parsed
      */
     public function __construct($callback)
     {
@@ -97,9 +102,7 @@ class Listener implements \JsonStreamingParser_Listener
     public function end_array_common()
     {
         $obj = array_pop($this->stack);
-        if (empty($this->stack)) {
-            // finish
-        } else {
+        if (!empty($this->stack)) {
             $parentObj = array_pop($this->stack);
             if ($this->objectKeys[$this->level]) {
                 $parentObj[$this->objectKeys[$this->level]] = $obj;
