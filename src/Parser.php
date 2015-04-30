@@ -19,18 +19,9 @@ class Parser
      */
     public function parse($filePath, $itemCallback)
     {
-        if (!is_callable($itemCallback)) {
-            throw new \Exception("Callback should be callable");
-        }
+        $this->checkCallback($itemCallback);
 
-        if (!is_file($filePath)) {
-            throw new \Exception('File does not exist: ' . $filePath);
-        }
-
-        $stream = @fopen($filePath, 'r');
-        if (false === $stream) {
-            throw new \Exception('Unable to open file for read: ' . $filePath);
-        }
+        $stream = $this->openFile($filePath);
 
         try {
             $listener = new Listener($itemCallback);
@@ -46,6 +37,38 @@ class Parser
             throw $e;
         }
         fclose($stream);
+    }
+
+    /**
+     * @param $callback
+     *
+     * @throws \Exception
+     */
+    protected function checkCallback($callback)
+    {
+        if (!is_callable($callback)) {
+            throw new \Exception("Callback should be callable");
+        }
+    }
+
+    /**
+     * @param $filePath
+     *
+     * @return resource
+     * @throws \Exception
+     */
+    protected function openFile($filePath)
+    {
+        if (!is_file($filePath)) {
+            throw new \Exception('File does not exist: ' . $filePath);
+        }
+
+        $stream = @fopen($filePath, 'r');
+        if (false === $stream) {
+            throw new \Exception('Unable to open file for read: ' . $filePath);
+        }
+
+        return $stream;
     }
 
     /**
