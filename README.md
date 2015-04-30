@@ -11,11 +11,41 @@
 [![License](https://img.shields.io/packagist/l/maxakawizard/json-collection-parser.svg)](https://packagist.org/packages/maxakawizard/json-collection-parser)
 
 Event-based parser for large JSON collections (consumes small amount of memory).
-Collection must be an array of objects.
 Built on top of [JSON Streaming Parser](https://github.com/salsify/jsonstreamingparser)
 
 This package is compliant with [PSR-4](http://www.php-fig.org/psr/4/), [PSR-1](http://www.php-fig.org/psr/1/), and [PSR-2](http://www.php-fig.org/psr/2/).
 If you notice compliance oversights, please send a patch via pull request.
+
+## Input data format
+Collection must be an array of objects.
+```javascript
+[
+    {
+        "id": 78,
+        "title": "Title",
+        "dealType": "sale",
+        "propertyType": "townhouse",
+        "properties": {
+            "bedroomsCount": 6,
+            "parking": "yes"
+        },
+        "photos": [
+            "1.jpg",
+            "2.jpg"
+        ]
+    },
+    {
+        "id": 729,
+        "dealType": "rent_long",
+        "propertyType": "villa"
+    },
+    {
+        "id": 5165,
+        "dealType": "rent_short",
+        "propertyType": "villa"
+    }
+]
+```
 
 ## Usage
 Function as callback:
