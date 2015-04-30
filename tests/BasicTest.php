@@ -54,6 +54,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->parser = new Parser();
+        $this->parser->setOption('emit_whitespace', true);
     }
 
     /**
@@ -144,5 +145,13 @@ class BasicTest extends \PHPUnit_Framework_TestCase
             TEST_DATA_PATH . '/parse_error.json',
             array($this, 'processItem')
         );
+    }
+
+    /**
+     *
+     */
+    public function testNonExistentOption()
+    {
+        $this->assertNull($this->parser->getOption('non_existent_option'));
     }
 }
