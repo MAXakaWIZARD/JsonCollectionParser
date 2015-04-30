@@ -72,7 +72,7 @@ class Parser
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param $value
      */
     public function setOption($name, $value)
@@ -81,9 +81,9 @@ class Parser
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
-     * @return null
+     * @return mixed
      */
     public function getOption($name)
     {
