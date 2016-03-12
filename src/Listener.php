@@ -1,7 +1,7 @@
 <?php
 namespace JsonCollectionParser;
 
-class Listener implements \JsonStreamingParser_Listener
+class Listener implements \JsonStreamingParser\Listener
 {
     /**
      * @var array

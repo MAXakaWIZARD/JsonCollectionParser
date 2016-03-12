@@ -25,7 +25,7 @@ class Parser
 
         try {
             $listener = new Listener($itemCallback);
-            $parser = new \JsonStreamingParser_Parser(
+            $parser = new \JsonStreamingParser\Parser(
                 $stream,
                 $listener,
                 $this->getOption('line_ending'),
