@@ -12,6 +12,11 @@ class Parser
     );
 
     /**
+     * @var \JsonStreamingParser\Parser
+     */
+    protected $parser;
+
+    /**
      * @param $filePath
      * @param $itemCallback
      *
@@ -25,18 +30,26 @@ class Parser
 
         try {
             $listener = new Listener($itemCallback);
-            $parser = new \JsonStreamingParser\Parser(
+            $this->parser = new \JsonStreamingParser\Parser(
                 $stream,
                 $listener,
                 $this->getOption('line_ending'),
                 $this->getOption('emit_whitespace')
             );
-            $parser->parse();
+            $this->parser->parse();
         } catch (\Exception $e) {
             fclose($stream);
             throw $e;
         }
         fclose($stream);
+    }
+
+    /**
+     *
+     */
+    public function stop()
+    {
+        $this->parser->stop();
     }
 
     /**
