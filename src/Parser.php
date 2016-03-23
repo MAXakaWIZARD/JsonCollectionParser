@@ -6,10 +6,10 @@ class Parser
     /**
      * @var array
      */
-    protected $options = array(
+    protected $options = [
         'line_ending' => "\n",
         'emit_whitespace' => false
-    );
+    ];
 
     /**
      * @var \JsonStreamingParser\Parser
@@ -17,8 +17,8 @@ class Parser
     protected $parser;
 
     /**
-     * @param $filePath
-     * @param $itemCallback
+     * @param string $filePath
+     * @param callback|callable $itemCallback
      *
      * @throws \Exception
      */
@@ -53,7 +53,7 @@ class Parser
     }
 
     /**
-     * @param $callback
+     * @param callback|callable $callback
      *
      * @throws \Exception
      */
@@ -65,7 +65,7 @@ class Parser
     }
 
     /**
-     * @param $filePath
+     * @param string $filePath
      *
      * @return resource
      * @throws \Exception
@@ -86,7 +86,7 @@ class Parser
 
     /**
      * @param string $name
-     * @param $value
+     * @param mixed $value
      */
     public function setOption($name, $value)
     {

@@ -7,7 +7,7 @@
 
 [![GitHub tag](https://img.shields.io/github/tag/MAXakaWIZARD/JsonCollectionParser.svg?label=latest)](https://packagist.org/packages/maxakawizard/json-collection-parser) 
 [![Packagist](https://img.shields.io/packagist/dt/maxakawizard/json-collection-parser.svg)](https://packagist.org/packages/maxakawizard/json-collection-parser)
-[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.3-8892BF.svg)](https://php.net/)
+[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg)](https://php.net/)
 [![License](https://img.shields.io/packagist/l/maxakawizard/json-collection-parser.svg)](https://packagist.org/packages/maxakawizard/json-collection-parser)
 
 Event-based parser for large JSON collections (consumes small amount of memory).
@@ -69,7 +69,7 @@ class ItemProcessor {
 }
 
 $parser = new \JsonCollectionParser\Parser();
-$parser->parse('/path/to/file.json', array('ItemProcessor', 'process'));
+$parser->parse('/path/to/file.json', ['ItemProcessor', 'process']);
 ```
 
 
@@ -84,7 +84,7 @@ class ItemProcessor {
 
 $parser = new \JsonCollectionParser\Parser();
 $processor = new \ItemProcessor();
-$parser->parse('/path/to/file.json', array($processor, 'process'));
+$parser->parse('/path/to/file.json', [$processor, 'process']);
 ```
 
 ## License

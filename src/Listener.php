@@ -19,12 +19,12 @@ class Listener implements \JsonStreamingParser\Listener
     protected $keys;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $level;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $objectLevel;
 
@@ -34,81 +34,86 @@ class Listener implements \JsonStreamingParser\Listener
     protected $objectKeys;
 
     /**
-     * @var callable
+     * @var callback|callable
      */
     protected $callback;
 
     /**
-     * @param callable $callback the function called when a json object has been fully parsed
+     * @param callback|callable $callback callback for parsed collection item
      */
     public function __construct($callback)
     {
         $this->callback = $callback;
     }
 
-    public function start_document()
+    public function startDocument()
     {
-        $this->stack = array();
+        $this->stack = [];
         $this->key = null;
-        $this->keys = array();
+        $this->keys = [];
         $this->objectLevel = 0;
         $this->level = 0;
-        $this->objectKeys = array();
+        $this->objectKeys = [];
     }
 
-    public function end_document()
+    public function endDocument()
     {
-        $this->stack = array();
-        $this->keys = array();
+        $this->stack = [];
+        $this->keys = [];
     }
 
-    public function start_object()
+    public function startObject()
     {
         $this->objectLevel++;
 
-        $this->start_array_common();
+        $this->startArrayCommon();
     }
 
-    public function end_object()
+    public function endObject()
     {
-        $this->end_array_common();
+        $this->endArrayCommon();
 
         $this->objectLevel--;
         if ($this->objectLevel === 0) {
             $obj = $this->stack[0][0];
             array_shift($this->stack[0]);
+
             call_user_func($this->callback, $obj);
         }
     }
 
-    public function start_array()
+    public function startArray()
     {
-        $this->start_array_common();
+        $this->startArrayCommon();
     }
 
-    public function start_array_common()
+    public function startArrayCommon()
     {
         $this->level++;
         $this->objectKeys[$this->level] = ($this->key) ? $this->key : null;
         $this->key = null;
-        array_push($this->stack, array());
+
+        array_push($this->stack, []);
     }
 
-    public function end_array()
+    public function endArray()
     {
-        $this->end_array_common();
+        $this->endArrayCommon();
     }
 
-    public function end_array_common()
+    public function endArrayCommon()
     {
         $obj = array_pop($this->stack);
+
         if (!empty($this->stack)) {
             $parentObj = array_pop($this->stack);
+
             if ($this->objectKeys[$this->level]) {
                 $parentObj[$this->objectKeys[$this->level]] = $obj;
             } else {
                 array_push($parentObj, $obj);
             }
+
             array_push($this->stack, $parentObj);
         }
 
@@ -116,7 +121,7 @@ class Listener implements \JsonStreamingParser\Listener
     }
 
     /**
-     * @param $key
+     * @param string $key
      */
     public function key($key)
     {
@@ -124,20 +129,25 @@ class Listener implements \JsonStreamingParser\Listener
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      */
     public function value($value)
     {
         $obj = array_pop($this->stack);
+
         if ($this->key) {
             $obj[$this->key] = $value;
             $this->key = null;
         } else {
             array_push($obj, $value);
         }
+
         array_push($this->stack, $obj);
     }
 
+    /**
+     * @param string $whitespace
+     */
     public function whitespace($whitespace)
     {
     }

@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+## 1.0.0 (2016-03-23)
+* Bump minimum PHP version to `5.4`
+* Update streaming parser library to `6.0`
+
 ## 0.3.0 (2016-03-13)
 * Add `Parser::stop` method
 
