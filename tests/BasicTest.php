@@ -16,37 +16,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected $correctData = array(
-        array(
-            'id' => 78,
-            'title' => 'Title',
-            'dealType' => 'sale',
-            'propertyType' => 'townhouse',
-            'properties' => array(
-                'bedroomsCount' => 6,
-                'parking' => 'yes'
-            ),
-            'photos' => array(
-                '1.jpg',
-                '2.jpg'
-            )
-        ),
-        array(
-            'id' => 729,
-            'dealType' => 'rent_long',
-            'propertyType' => 'villa'
-        ),
-        array(
-            'id' => 5165,
-            'dealType' => 'rent_short',
-            'propertyType' => 'villa'
-        )
-    );
-
-    /**
-     * @var int
-     */
-    protected $itemIndex = 0;
+    protected $items = [];
 
     /**
      *
@@ -74,20 +44,50 @@ class BasicTest extends \PHPUnit_Framework_TestCase
      */
     public function testGeneral()
     {
-        $this->itemIndex = 0;
+        $this->items = [];
+
+        $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
-            TEST_DATA_PATH . '/basic.json',
-            array($this, 'processItem')
+            $filePath,
+            [$this, 'processItem']
         );
+
+        $correctData = json_decode(file_get_contents($filePath), true);
+        $this->assertSame($correctData, $this->items);
     }
 
     /**
-     * @param $item
+     * @param array $item
      */
     public function processItem($item)
     {
-        $this->assertSame($item, $this->correctData[$this->itemIndex]);
-        $this->itemIndex++;
+        $this->items[] = $item;
+    }
+
+    /**
+     *
+     */
+    public function testWithStop()
+    {
+        $this->items = [];
+
+        $filePath = TEST_DATA_PATH . '/basic.json';
+        $this->parser->parse(
+            $filePath,
+            [$this, 'processFirstItem']
+        );
+
+        $correctData = json_decode(file_get_contents($filePath), true);
+        $this->assertSame([$correctData[0]], $this->items);
+    }
+
+    /**
+     * @param array $item
+     */
+    public function processFirstItem($item)
+    {
+        $this->items[] = $item;
+        $this->parser->stop();
     }
 
     /**
@@ -111,7 +111,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception', 'File does not exist: ' . $filePath);
         $this->parser->parse(
             $filePath,
-            array($this, 'processItem')
+            [$this, 'processItem']
         );
     }
 
@@ -128,7 +128,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception', 'Unable to open file for read: ' . $filePath);
         $this->parser->parse(
             $filePath,
-            array($this, 'processItem')
+            [$this, 'processItem']
         );
     }
 
@@ -143,7 +143,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         );
         $this->parser->parse(
             TEST_DATA_PATH . '/parse_error.json',
-            array($this, 'processItem')
+            [$this, 'processItem']
         );
     }
 
