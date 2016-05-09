@@ -19,17 +19,18 @@ class Parser
     /**
      * @param string $filePath
      * @param callback|callable $itemCallback
+     * @param bool $assoc
      *
      * @throws \Exception
      */
-    public function parse($filePath, $itemCallback)
+    public function parse($filePath, $itemCallback, $assoc = false)
     {
         $this->checkCallback($itemCallback);
 
         $stream = $this->openFile($filePath);
 
         try {
-            $listener = new Listener($itemCallback);
+            $listener = new Listener($itemCallback, $assoc);
             $this->parser = new \JsonStreamingParser\Parser(
                 $stream,
                 $listener,
