@@ -66,7 +66,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
             $filePath,
-            [$this, 'processItem'],
+            [$this, 'processAssocItem'],
             true
         );
 
@@ -77,8 +77,18 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $item
      */
+    public function processAssocItem($item)
+    {
+        $this->assertTrue(is_array($item), 'Item is expected as associative array');
+        $this->items[] = $item;
+    }
+
+    /**
+     * @param object $item
+     */
     public function processItem($item)
     {
+        $this->assertTrue(is_object($item), 'Item is expected as object');
         $this->items[] = $item;
     }
 
