@@ -39,11 +39,18 @@ class Listener implements \JsonStreamingParser\Listener
     protected $callback;
 
     /**
-     * @param callback|callable $callback callback for parsed collection item
+     * @var bool
      */
-    public function __construct($callback)
+    protected $assoc;
+
+    /**
+     * @param callback|callable $callback callback for parsed collection item
+     * @param bool $assoc When @c true, returned objects will be converted into associative arrays.
+     */
+    public function __construct($callback, $assoc = false)
     {
         $this->callback = $callback;
+        $this->assoc = $assoc;
     }
 
     public function startDocument()
@@ -66,12 +73,12 @@ class Listener implements \JsonStreamingParser\Listener
     {
         $this->objectLevel++;
 
-        $this->startArrayCommon();
+        $this->startCommon();
     }
 
     public function endObject()
     {
-        $this->endArrayCommon();
+        $this->endCommon(true);
 
         $this->objectLevel--;
         if ($this->objectLevel === 0) {
@@ -84,10 +91,10 @@ class Listener implements \JsonStreamingParser\Listener
 
     public function startArray()
     {
-        $this->startArrayCommon();
+        $this->startCommon();
     }
 
-    public function startArrayCommon()
+    public function startCommon()
     {
         $this->level++;
         $this->objectKeys[$this->level] = ($this->key) ? $this->key : null;
@@ -98,12 +105,16 @@ class Listener implements \JsonStreamingParser\Listener
 
     public function endArray()
     {
-        $this->endArrayCommon();
+        $this->endCommon(false);
     }
 
-    public function endArrayCommon()
+    public function endCommon($isObject)
     {
         $obj = array_pop($this->stack);
+
+        if ($isObject && !$this->assoc) {
+            $obj = (object)$obj;
+        }
 
         if (!empty($this->stack)) {
             $parentObj = array_pop($this->stack);

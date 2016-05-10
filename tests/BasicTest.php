@@ -49,7 +49,26 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
             $filePath,
-            [$this, 'processItem']
+            [$this, 'processItem'],
+            false
+        );
+
+        $correctData = json_decode(file_get_contents($filePath), false);
+        $this->assertEquals($correctData, $this->items);
+    }
+
+    /**
+     *
+     */
+    public function testAssoc()
+    {
+        $this->items = [];
+
+        $filePath = TEST_DATA_PATH . '/basic.json';
+        $this->parser->parse(
+            $filePath,
+            [$this, 'processItem'],
+            true
         );
 
         $correctData = json_decode(file_get_contents($filePath), true);
@@ -74,7 +93,8 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
             $filePath,
-            [$this, 'processFirstItem']
+            [$this, 'processFirstItem'],
+            true
         );
 
         $correctData = json_decode(file_get_contents($filePath), true);
