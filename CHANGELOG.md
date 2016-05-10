@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.1.0 (2016-05-10)
+* Ability to receive collection items as associative arrays
+
 ## 1.0.0 (2016-03-23)
 * Bump minimum PHP version to `5.4`
 * Update streaming parser library to `6.0`
