@@ -49,11 +49,10 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
             $filePath,
-            [$this, 'processItem'],
-            false
+            [$this, 'processItem']
         );
 
-        $correctData = json_decode(file_get_contents($filePath), false);
+        $correctData = json_decode(file_get_contents($filePath));
         $this->assertEquals($correctData, $this->items);
     }
 

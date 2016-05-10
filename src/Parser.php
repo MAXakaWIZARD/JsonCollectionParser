@@ -17,9 +17,9 @@ class Parser
     protected $parser;
 
     /**
-     * @param string $filePath
-     * @param callback|callable $itemCallback
-     * @param bool $assoc
+     * @param string $filePath Source file path
+     * @param callback|callable $itemCallback Callback
+     * @param bool $assoc Parse as associative arrays
      *
      * @throws \Exception
      */

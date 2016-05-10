@@ -45,7 +45,7 @@ class Listener implements \JsonStreamingParser\Listener
 
     /**
      * @param callback|callable $callback callback for parsed collection item
-     * @param bool $assoc When @c true, returned objects will be converted into associative arrays.
+     * @param bool $assoc When true, returned objects will be converted into associative arrays
      */
     public function __construct($callback, $assoc = false)
     {
@@ -78,7 +78,7 @@ class Listener implements \JsonStreamingParser\Listener
 
     public function endObject()
     {
-        $this->endCommon(true);
+        $this->endCommon();
 
         $this->objectLevel--;
         if ($this->objectLevel === 0) {
@@ -108,7 +108,7 @@ class Listener implements \JsonStreamingParser\Listener
         $this->endCommon(false);
     }
 
-    public function endCommon($isObject)
+    public function endCommon($isObject = true)
     {
         $obj = array_pop($this->stack);
 
