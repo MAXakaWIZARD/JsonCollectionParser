@@ -47,7 +47,7 @@ class Listener implements \JsonStreamingParser\Listener
      * @param callback|callable $callback callback for parsed collection item
      * @param bool $assoc When true, returned objects will be converted into associative arrays
      */
-    public function __construct($callback, $assoc = false)
+    public function __construct($callback, $assoc = true)
     {
         $this->callback = $callback;
         $this->assoc = $assoc;

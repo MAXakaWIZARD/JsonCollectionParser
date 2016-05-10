@@ -51,9 +51,9 @@ Collection must be an array of objects.
 ## Usage
 Function as callback:
 ```php
-function processItem(\stdClass $item)
+function processItem(array $item)
 {
-    is_object($item); //true
+    is_array($item); //true
     print_r($item);
 }
 
@@ -64,9 +64,9 @@ $parser->parse('/path/to/file.json', 'processItem');
 Static method as callback:
 ```php
 class ItemProcessor {
-    public static function process(\stdClass $item)
+    public static function process(array $item)
     {
-        is_object($item); //true
+        is_array($item); //true
         print_r($item);
     }
 }
@@ -78,9 +78,9 @@ $parser->parse('/path/to/file.json', ['ItemProcessor', 'process']);
 Instance method as callback:
 ```php
 class ItemProcessor {
-    public function process(\stdClass $item)
+    public function process(array $item)
     {
-        is_object($item); //true
+        is_array($item); //true
         print_r($item);
     }
 }
@@ -90,17 +90,17 @@ $processor = new \ItemProcessor();
 $parser->parse('/path/to/file.json', [$processor, 'process']);
 ```
 
-Receive items as associative arrays:
+Receive items as objects:
 ```php
-function processItem(array $item)
+function processItem(\stdClass $item)
 {
-    is_array($item); //true
-    is_object($item); //false
+    is_array($item); //false
+    is_object($item); //true
     print_r($item);
 }
 
 $parser = new \JsonCollectionParser\Parser();
-$parser->parse('/path/to/file.json', 'processItem', true);
+$parser->parse('/path/to/file.json', 'processItem', false);
 ```
 
 ## License

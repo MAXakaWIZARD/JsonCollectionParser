@@ -23,7 +23,7 @@ class Parser
      *
      * @throws \Exception
      */
-    public function parse($filePath, $itemCallback, $assoc = false)
+    public function parse($filePath, $itemCallback, $assoc = true)
     {
         $this->checkCallback($itemCallback);
 

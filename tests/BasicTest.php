@@ -49,25 +49,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
             $filePath,
-            [$this, 'processItem']
-        );
-
-        $correctData = json_decode(file_get_contents($filePath));
-        $this->assertEquals($correctData, $this->items);
-    }
-
-    /**
-     *
-     */
-    public function testAssoc()
-    {
-        $this->items = [];
-
-        $filePath = TEST_DATA_PATH . '/basic.json';
-        $this->parser->parse(
-            $filePath,
-            [$this, 'processAssocItem'],
-            true
+            [$this, 'processArrayItem']
         );
 
         $correctData = json_decode(file_get_contents($filePath), true);
@@ -75,9 +57,27 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     *
+     */
+    public function testReceiveAsObjects()
+    {
+        $this->items = [];
+
+        $filePath = TEST_DATA_PATH . '/basic.json';
+        $this->parser->parse(
+            $filePath,
+            [$this, 'processObjectItem'],
+            false
+        );
+
+        $correctData = json_decode(file_get_contents($filePath));
+        $this->assertEquals($correctData, $this->items);
+    }
+
+    /**
      * @param array $item
      */
-    public function processAssocItem($item)
+    public function processArrayItem($item)
     {
         $this->assertTrue(is_array($item), 'Item is expected as associative array');
         $this->items[] = $item;
@@ -86,7 +86,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     /**
      * @param object $item
      */
-    public function processItem($item)
+    public function processObjectItem($item)
     {
         $this->assertTrue(is_object($item), 'Item is expected as object');
         $this->items[] = $item;
@@ -140,7 +140,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception', 'File does not exist: ' . $filePath);
         $this->parser->parse(
             $filePath,
-            [$this, 'processItem']
+            [$this, 'processArrayItem']
         );
     }
 
@@ -157,7 +157,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Exception', 'Unable to open file for read: ' . $filePath);
         $this->parser->parse(
             $filePath,
-            [$this, 'processItem']
+            [$this, 'processArrayItem']
         );
     }
 
@@ -172,7 +172,7 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         );
         $this->parser->parse(
             TEST_DATA_PATH . '/parse_error.json',
-            [$this, 'processItem']
+            [$this, 'processArrayItem']
         );
     }
 

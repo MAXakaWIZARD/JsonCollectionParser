@@ -1,8 +1,11 @@
 CHANGELOG
 =========
 
+## 1.1.1 (2016-05-10)
+* Fix BC by changing default `assoc` param to true
+
 ## 1.1.0 (2016-05-10)
-* Ability to receive collection items as associative arrays
+* Ability to receive collection items as objects
 
 ## 1.0.0 (2016-03-23)
 * Bump minimum PHP version to `5.4`
