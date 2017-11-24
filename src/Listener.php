@@ -57,7 +57,6 @@ class Listener implements \JsonStreamingParser\Listener
     {
         $this->stack = [];
         $this->key = null;
-        $this->keys = [];
         $this->objectLevel = 0;
         $this->level = 0;
         $this->objectKeys = [];
@@ -66,7 +65,6 @@ class Listener implements \JsonStreamingParser\Listener
     public function endDocument()
     {
         $this->stack = [];
-        $this->keys = [];
     }
 
     public function startObject()
@@ -82,9 +80,8 @@ class Listener implements \JsonStreamingParser\Listener
 
         $this->objectLevel--;
         if ($this->objectLevel === 0) {
-            $obj = $this->stack[0][0];
-            array_shift($this->stack[0]);
-
+            $obj = array_pop($this->stack);
+            $obj = reset($obj);
             call_user_func($this->callback, $obj);
         }
     }
@@ -120,13 +117,18 @@ class Listener implements \JsonStreamingParser\Listener
             $parentObj = array_pop($this->stack);
 
             if ($this->objectKeys[$this->level]) {
-                $parentObj[$this->objectKeys[$this->level]] = $obj;
+                $objectKey = $this->objectKeys[$this->level];
+                $parentObj[$objectKey] = $obj;
+                unset($this->objectKeys[$this->level]);
             } else {
-                array_push($parentObj, $obj);
+                $parentObj[0] = $obj;
             }
-
-            array_push($this->stack, $parentObj);
         }
+        else {
+            $parentObj[0] = $obj;
+        }
+
+        array_push($this->stack, $parentObj);
 
         $this->level--;
     }

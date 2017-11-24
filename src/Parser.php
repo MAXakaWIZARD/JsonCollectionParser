@@ -17,17 +17,18 @@ class Parser
     protected $parser;
 
     /**
-     * @param string $filePath Source file path
+     * @param string|mixed $input
      * @param callback|callable $itemCallback Callback
      * @param bool $assoc Parse as associative arrays
      *
      * @throws \Exception
      */
-    public function parse($filePath, $itemCallback, $assoc = true)
+    public function parse($input, $itemCallback, $assoc = true)
     {
         $this->checkCallback($itemCallback);
 
-        $stream = $this->openFile($filePath);
+        $manage_stream = !is_resource($input);
+        $stream = $manage_stream ? $this->openFile($input) : $input;
 
         try {
             $listener = new Listener($itemCallback, $assoc);
@@ -42,7 +43,9 @@ class Parser
             fclose($stream);
             throw $e;
         }
-        fclose($stream);
+        if ($manage_stream) {
+            fclose($stream);
+        }
     }
 
     /**

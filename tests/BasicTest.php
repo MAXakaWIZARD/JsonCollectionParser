@@ -54,6 +54,29 @@ class BasicTest extends \PHPUnit_Framework_TestCase
 
         $correctData = json_decode(file_get_contents($filePath), true);
         $this->assertSame($correctData, $this->items);
+
+    }
+
+    /**
+     * @dataProvider providerDocumentsStream
+     *
+     */
+    public function testDocumentsStream($data, $result)
+    {
+        $this->items = [];
+
+        $stream = fopen('php://memory','r+');
+        fwrite($stream, $data);
+        rewind($stream);
+
+        $this->parser->parse(
+            $stream,
+            [$this, 'processArrayItem']
+        );
+
+        fclose($stream);
+
+        $this->assertSame($result, $this->items);
     }
 
     /**
@@ -183,4 +206,31 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertNull($this->parser->getOption('non_existent_option'));
     }
+
+    public function providerDocumentsStream()
+    {
+        return [
+            [
+                '{"a": 1}',
+                [["a"=>1]]
+            ],
+            [
+                '{"a": 1}{"b": 2}',
+                [["a"=>1], ["b"=>2]]
+            ],
+            [
+                '[{"a": 1}]{"b": 2}',
+                [["a"=>1], ["b"=>2]]
+            ],
+            [
+                '[[{"a": 1}]]{"b": 2}',
+                [["a"=>1], ["b"=>2]]
+            ],
+            [
+                '[{"a": 1}][{"b": 2}]',
+                [["a"=>1], ["b"=>2]]
+            ],
+        ];
+    }
+
 }
