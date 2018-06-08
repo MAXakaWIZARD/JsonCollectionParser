@@ -39,10 +39,10 @@ class Parser
             );
             $this->parser->parse();
         } catch (\Exception $e) {
-            fclose($stream);
+            gzclose($stream);
             throw $e;
         }
-        fclose($stream);
+        gzclose($stream);
     }
 
     /**
@@ -77,7 +77,7 @@ class Parser
             throw new \Exception('File does not exist: ' . $filePath);
         }
 
-        $stream = @fopen($filePath, 'r');
+        $stream = @gzopen($filePath, 'r');
         if (false === $stream) {
             throw new \Exception('Unable to open file for read: ' . $filePath);
         }
