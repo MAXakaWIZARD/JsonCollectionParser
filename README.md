@@ -7,7 +7,7 @@
 
 [![GitHub tag](https://img.shields.io/github/tag/MAXakaWIZARD/JsonCollectionParser.svg?label=latest)](https://packagist.org/packages/maxakawizard/json-collection-parser) 
 [![Packagist](https://img.shields.io/packagist/dt/maxakawizard/json-collection-parser.svg)](https://packagist.org/packages/maxakawizard/json-collection-parser)
-[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.4-8892BF.svg)](https://php.net/)
+[![Minimum PHP Version](http://img.shields.io/badge/php-%3E%3D%205.6-8892BF.svg)](https://php.net/)
 [![PHP 7 ready](http://php7ready.timesplinter.ch/MAXakaWIZARD/JsonCollectionParser/badge.svg)](https://travis-ci.org/MAXakaWIZARD/JsonCollectionParser)
 [![License](https://img.shields.io/packagist/l/maxakawizard/json-collection-parser.svg)](https://packagist.org/packages/maxakawizard/json-collection-parser)
 
@@ -101,6 +101,11 @@ function processItem(\stdClass $item)
 
 $parser = new \JsonCollectionParser\Parser();
 $parser->parse('/path/to/file.json', 'processItem', false);
+```
+
+## Running tests
+```bash
+./vendor/bin/phpunit
 ```
 
 ## License

@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+## 1.2.0 (2018-06-19)
+* Add support PHP 7.1 and 7.2
+* Drop support of PHP older than 5.6
+* Fix tests
+
 ## 1.1.1 (2016-05-10)
 * Fix BC by changing default `assoc` param to true
 

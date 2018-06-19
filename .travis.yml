@@ -1,20 +1,23 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
+  - nightly
+
+matrix:
+    allow_failures:
+        - php: nightly
 
 before_script:
-  - if [[ "$TRAVIS_PHP_VERSION" == '7.0' ]]; then composer install -n ; fi
-  - if [[ "$TRAVIS_PHP_VERSION" != '7.0' ]]; then composer install --no-dev -n ; fi
+  - composer install -n
 
 script:
   - mkdir -p build/logs
-  - if [[ "$TRAVIS_PHP_VERSION" == '7.0' ]]; then phpunit --coverage-clover build/logs/clover.xml ; fi
-  - if [[ "$TRAVIS_PHP_VERSION" != '7.0' ]]; then phpunit ; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == '7.0' ]]; then vendor/bin/phpunit --coverage-clover build/logs/clover.xml ; fi
+  - if [[ "$TRAVIS_PHP_VERSION" != '7.0' ]]; then vendor/bin/phpunit ; fi
 
 after_script:
  - if [[ "$TRAVIS_PHP_VERSION" == '7.0' ]]; then php vendor/bin/coveralls -v ; fi
