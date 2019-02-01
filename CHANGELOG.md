@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+## 1.3.0 (2019-01-02)
+* Drop support of PHP older than 7.1
+* Add support for PHP 7.3
+
 ## 1.2.0 (2018-06-19)
 * Add support PHP 7.1 and 7.2
 * Drop support of PHP older than 5.6

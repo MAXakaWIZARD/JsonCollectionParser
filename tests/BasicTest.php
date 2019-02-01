@@ -2,11 +2,12 @@
 namespace JsonCollectionParser\Tests;
 
 use JsonCollectionParser\Parser;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  */
-class BasicTest extends \PHPUnit_Framework_TestCase
+class BasicTest extends TestCase
 {
     /**
      * @var Parser
@@ -124,7 +125,8 @@ class BasicTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidCallback()
     {
-        $this->setExpectedException('\Exception', 'Callback should be callable');
+        $this->expectExceptionMessage('Callback should be callable');
+
         $this->parser->parse(
             TEST_DATA_PATH . '/basic.json',
             'nonExistentFunction'
@@ -137,7 +139,9 @@ class BasicTest extends \PHPUnit_Framework_TestCase
     public function testNonExistentFile()
     {
         $filePath = TEST_DATA_PATH . '/not_exists.json';
-        $this->setExpectedException('\Exception', 'File does not exist: ' . $filePath);
+
+        $this->expectExceptionMessage('File does not exist: ' . $filePath);
+
         $this->parser->parse(
             $filePath,
             [$this, 'processArrayItem']
@@ -154,7 +158,8 @@ class BasicTest extends \PHPUnit_Framework_TestCase
         $this->assertFileExists($filePath);
         chmod($filePath, 0000);
 
-        $this->setExpectedException('\Exception', 'Unable to open file for read: ' . $filePath);
+        $this->expectExceptionMessage('Unable to open file for read: ' . $filePath);
+
         $this->parser->parse(
             $filePath,
             [$this, 'processArrayItem']
@@ -166,10 +171,10 @@ class BasicTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseError()
     {
-        $this->setExpectedException(
-            '\Exception',
+        $this->expectExceptionMessage(
             'Parsing error in [3:5]. Start of string expected for object key. Instead got: i'
         );
+
         $this->parser->parse(
             TEST_DATA_PATH . '/parse_error.json',
             [$this, 'processArrayItem']
