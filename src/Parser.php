@@ -17,6 +17,16 @@ class Parser
     protected $parser;
 
     /**
+     * @var bool
+     */
+    protected $gzipSupported;
+
+    public function __construct()
+    {
+        $this->gzipSupported = extension_loaded('zlib');
+    }
+
+    /**
      * @param string $filePath Source file path
      * @param callback|callable $itemCallback Callback
      * @param bool $assoc Parse as associative arrays
@@ -39,10 +49,11 @@ class Parser
             );
             $this->parser->parse();
         } catch (\Exception $e) {
-            fclose($stream);
+            $this->gzipSupported ? gzclose($stream) : fclose($stream);
             throw $e;
         }
-        fclose($stream);
+
+        $this->gzipSupported ? gzclose($stream) : fclose($stream);
     }
 
     /**
@@ -77,7 +88,7 @@ class Parser
             throw new \Exception('File does not exist: ' . $filePath);
         }
 
-        $stream = @fopen($filePath, 'r');
+        $stream = $this->gzipSupported ? @gzopen($filePath, 'r') : @fopen($filePath, 'r');
         if (false === $stream) {
             throw new \Exception('Unable to open file for read: ' . $filePath);
         }

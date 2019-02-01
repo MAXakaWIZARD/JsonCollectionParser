@@ -1,7 +1,10 @@
 CHANGELOG
 =========
 
-## 1.3.0 (2019-01-02)
+## 1.4.0 (2019-02-01)
+* Add support for GZIP-compressed files
+
+## 1.3.0 (2019-02-01)
 * Drop support of PHP older than 7.1
 * Add support for PHP 7.3
 

@@ -19,18 +19,12 @@ class BasicTest extends TestCase
      */
     protected $items = [];
 
-    /**
-     *
-     */
     public function setUp()
     {
         $this->parser = new Parser();
         $this->parser->setOption('emit_whitespace', true);
     }
 
-    /**
-     *
-     */
     public function tearDown()
     {
         $filePath = TEST_DATA_PATH . '/non_readable.json';
@@ -40,9 +34,6 @@ class BasicTest extends TestCase
         }
     }
 
-    /**
-     *
-     */
     public function testGeneral()
     {
         $this->items = [];
@@ -57,9 +48,6 @@ class BasicTest extends TestCase
         $this->assertSame($correctData, $this->items);
     }
 
-    /**
-     *
-     */
     public function testReceiveAsObjects()
     {
         $this->items = [];
@@ -93,9 +81,6 @@ class BasicTest extends TestCase
         $this->items[] = $item;
     }
 
-    /**
-     *
-     */
     public function testWithStop()
     {
         $this->items = [];
@@ -120,9 +105,6 @@ class BasicTest extends TestCase
         $this->parser->stop();
     }
 
-    /**
-     *
-     */
     public function testInvalidCallback()
     {
         $this->expectExceptionMessage('Callback should be callable');
@@ -133,9 +115,6 @@ class BasicTest extends TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testNonExistentFile()
     {
         $filePath = TEST_DATA_PATH . '/not_exists.json';
@@ -148,9 +127,6 @@ class BasicTest extends TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testNonReadableFile()
     {
         $filePath = TEST_DATA_PATH . '/non_readable.json';
@@ -166,9 +142,6 @@ class BasicTest extends TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testParseError()
     {
         $this->expectExceptionMessage(
@@ -181,11 +154,29 @@ class BasicTest extends TestCase
         );
     }
 
-    /**
-     *
-     */
     public function testNonExistentOption()
     {
         $this->assertNull($this->parser->getOption('non_existent_option'));
+    }
+
+    public function testGzip()
+    {
+        if (!extension_loaded('zlib')) {
+            $this->addWarning('zlib extension not loaded, test skipped');
+            $this->markAsRisky();
+        }
+
+        $this->items = [];
+
+        $filePath = TEST_DATA_PATH . '/basic.json.gz';
+        $this->parser->parse(
+            $filePath,
+            [$this, 'processArrayItem']
+        );
+
+        $decodedFilePath = TEST_DATA_PATH . '/basic.json';
+        $correctData = json_decode(file_get_contents($decodedFilePath), true);
+
+        $this->assertSame($correctData, $this->items);
     }
 }

@@ -24,5 +24,8 @@
             "JsonCollectionParser\\": "src/",
             "JsonCollectionParser\\Tests\\": "tests/"
         }
+    },
+    "suggest": {
+        "ext-zlib": "Needed to support GZIP-compressed files"
     }
 }
