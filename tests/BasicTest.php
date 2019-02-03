@@ -19,8 +19,15 @@ class BasicTest extends TestCase
      */
     protected $items = [];
 
+    /**
+     * @var string
+     */
+    protected $basicJsonFilePath;
+
     public function setUp()
     {
+        $this->basicJsonFilePath = TEST_DATA_PATH . '/basic.json';
+
         $this->parser = new Parser();
         $this->parser->setOption('emit_whitespace', true);
     }
@@ -38,13 +45,12 @@ class BasicTest extends TestCase
     {
         $this->items = [];
 
-        $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
-            $filePath,
+            $this->basicJsonFilePath,
             [$this, 'processArrayItem']
         );
 
-        $correctData = json_decode(file_get_contents($filePath), true);
+        $correctData = json_decode(file_get_contents($this->basicJsonFilePath), true);
         $this->assertSame($correctData, $this->items);
     }
 
@@ -52,14 +58,13 @@ class BasicTest extends TestCase
     {
         $this->items = [];
 
-        $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
-            $filePath,
+            $this->basicJsonFilePath,
             [$this, 'processObjectItem'],
             false
         );
 
-        $correctData = json_decode(file_get_contents($filePath));
+        $correctData = json_decode(file_get_contents($this->basicJsonFilePath));
         $this->assertEquals($correctData, $this->items);
     }
 
@@ -85,14 +90,13 @@ class BasicTest extends TestCase
     {
         $this->items = [];
 
-        $filePath = TEST_DATA_PATH . '/basic.json';
         $this->parser->parse(
-            $filePath,
+            $this->basicJsonFilePath,
             [$this, 'processFirstItem'],
             true
         );
 
-        $correctData = json_decode(file_get_contents($filePath), true);
+        $correctData = json_decode(file_get_contents($this->basicJsonFilePath), true);
         $this->assertSame([$correctData[0]], $this->items);
     }
 
@@ -110,7 +114,7 @@ class BasicTest extends TestCase
         $this->expectExceptionMessage('Callback should be callable');
 
         $this->parser->parse(
-            TEST_DATA_PATH . '/basic.json',
+            $this->basicJsonFilePath,
             'nonExistentFunction'
         );
     }
@@ -168,15 +172,43 @@ class BasicTest extends TestCase
 
         $this->items = [];
 
-        $filePath = TEST_DATA_PATH . '/basic.json.gz';
         $this->parser->parse(
-            $filePath,
+            $this->basicJsonFilePath . '.gz',
             [$this, 'processArrayItem']
         );
 
-        $decodedFilePath = TEST_DATA_PATH . '/basic.json';
-        $correctData = json_decode(file_get_contents($decodedFilePath), true);
+        $correctData = json_decode(file_get_contents($this->basicJsonFilePath), true);
 
+        $this->assertSame($correctData, $this->items);
+    }
+
+    public function testFileStream()
+    {
+        $this->items = [];
+
+        $this->parser->parse(
+            fopen($this->basicJsonFilePath, 'r'),
+            [$this, 'processArrayItem']
+        );
+
+        $correctData = json_decode(file_get_contents($this->basicJsonFilePath), true);
+        $this->assertSame($correctData, $this->items);
+    }
+
+    public function testMemoryStream()
+    {
+        $this->items = [];
+
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, file_get_contents($this->basicJsonFilePath));
+        rewind($stream);
+
+        $this->parser->parse(
+            $stream,
+            [$this, 'processArrayItem']
+        );
+
+        $correctData = json_decode(file_get_contents($this->basicJsonFilePath), true);
         $this->assertSame($correctData, $this->items);
     }
 }

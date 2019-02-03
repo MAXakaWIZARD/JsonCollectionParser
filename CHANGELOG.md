@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+## 1.5.0 (2019-02-03)
+* Add support for streams
+* Add `parseAsObjects` method
+
 ## 1.4.0 (2019-02-01)
 * Add support for GZIP-compressed files
 

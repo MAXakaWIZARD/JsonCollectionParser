@@ -21,23 +21,28 @@ class Parser
      */
     protected $gzipSupported;
 
+    /**
+     * @var resource
+     */
+    protected $stream;
+
     public function __construct()
     {
         $this->gzipSupported = extension_loaded('zlib');
     }
 
     /**
-     * @param string $filePath Source file path
+     * @param string|resource $input File path or resource
      * @param callback|callable $itemCallback Callback
      * @param bool $assoc Parse as associative arrays
      *
      * @throws \Exception
      */
-    public function parse($filePath, $itemCallback, $assoc = true)
+    public function parse($input, $itemCallback, $assoc = true)
     {
         $this->checkCallback($itemCallback);
 
-        $stream = $this->openFile($filePath);
+        $stream = $this->openStream($input);
 
         try {
             $listener = new Listener($itemCallback, $assoc);
@@ -54,6 +59,17 @@ class Parser
         }
 
         $this->gzipSupported ? gzclose($stream) : fclose($stream);
+    }
+
+    /**
+     * @param string|resource $input File path or resource
+     * @param callback|callable $itemCallback Callback
+     *
+     * @throws \Exception
+     */
+    public function parseAsObjects($input, $itemCallback)
+    {
+        $this->parse($input, $itemCallback, false);
     }
 
     /**
@@ -77,20 +93,24 @@ class Parser
     }
 
     /**
-     * @param string $filePath
+     * @param string|resource $input File path or resource
      *
      * @return resource
      * @throws \Exception
      */
-    protected function openFile($filePath)
+    protected function openStream($input)
     {
-        if (!is_file($filePath)) {
-            throw new \Exception('File does not exist: ' . $filePath);
+        if (is_resource($input)) {
+            return $input;
         }
 
-        $stream = $this->gzipSupported ? @gzopen($filePath, 'r') : @fopen($filePath, 'r');
+        if (!is_file($input)) {
+            throw new \Exception('File does not exist: ' . $input);
+        }
+
+        $stream = $this->gzipSupported ? @gzopen($input, 'r') : @fopen($input, 'r');
         if (false === $stream) {
-            throw new \Exception('Unable to open file for read: ' . $filePath);
+            throw new \Exception('Unable to open file for read: ' . $input);
         }
 
         return $stream;

@@ -25,6 +25,9 @@
             "JsonCollectionParser\\Tests\\": "tests/"
         }
     },
+    "scripts": {
+        "test": "phpunit"
+    },
     "suggest": {
         "ext-zlib": "Needed to support GZIP-compressed files"
     }

@@ -105,7 +105,15 @@ function processItem(\stdClass $item)
 }
 
 $parser = new \JsonCollectionParser\Parser();
-$parser->parse('/path/to/file.json', 'processItem', false);
+$parser->parseAsObjects('/path/to/file.json', 'processItem');
+```
+
+Pass stream as parser input:
+```php
+$stream = fopen('/path/to/file.json', 'r');
+
+$parser = new \JsonCollectionParser\Parser();
+$parser->parseAsObjects($stream, 'processItem');
 ```
 
 ## Supported file formats
@@ -115,7 +123,7 @@ $parser->parse('/path/to/file.json', 'processItem', false);
 
 ## Running tests
 ```bash
-./vendor/bin/phpunit
+composer test
 ```
 
 ## License
