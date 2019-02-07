@@ -78,6 +78,14 @@ class BasicTest extends TestCase
     }
 
     /**
+     * @param array $item
+     */
+    public function processArrayItemBypass($item)
+    {
+        $this->assertTrue(is_array($item), 'Item is expected as associative array');
+    }
+
+    /**
      * @param object $item
      */
     public function processObjectItem($item)

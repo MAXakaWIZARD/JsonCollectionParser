@@ -66,6 +66,16 @@ $parser = new \JsonCollectionParser\Parser();
 $parser->parse('/path/to/file.json', 'processItem');
 ```
 
+Closure as callback:
+```php
+$items = [];
+
+$parser = new \JsonCollectionParser\Parser();
+$parser->parse('/path/to/file.json', function (array $item) use (&$items) {
+    $items[] = $item;
+});
+```
+
 Static method as callback:
 ```php
 class ItemProcessor {
