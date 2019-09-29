@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": "^7.1",
-        "salsify/json-streaming-parser": "~6.0"
+        "salsify/json-streaming-parser": "^8.0.2"
     },
     "require-dev": {
         "satooshi/php-coveralls": "~2.0",

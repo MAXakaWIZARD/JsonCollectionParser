@@ -23,7 +23,9 @@ composer require maxakawizard/json-collection-parser:~1.0
 ```
 
 ## Input data format
-Collection must be an array of objects.
+Data must be in one of following formats:
+
+### Array of objects (valid JSON)
 ```javascript
 [
     {
@@ -53,8 +55,68 @@ Collection must be an array of objects.
 ]
 ```
 
+### Sequence of object literals:
+```text
+{
+    "id": 78,
+    "dealType": "sale",
+    "propertyType": "townhouse"
+}
+{
+    "id": 729,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+}
+{
+    "id": 5165,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+}
+```
+
+### Sequence of object and array literals:
+```text
+[[{
+    "id": 78,
+    "dealType": "sale",
+    "propertyType": "townhouse"
+}]]
+{
+    "id": 729,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+}
+[{
+    "id": 5165,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+}]
+```
+
+### Sequence of object and array literals (some of objects in subarrays, comma-separated):
+```text
+[
+{
+    "id": 78,
+    "dealType": "sale",
+    "propertyType": "townhouse"
+},
+{
+    "id": 729,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+}
+]
+{
+    "id": 5165,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+}
+```
+
 ## Usage
-Function as callback:
+
+### Function as callback:
 ```php
 function processItem(array $item)
 {
@@ -66,7 +128,7 @@ $parser = new \JsonCollectionParser\Parser();
 $parser->parse('/path/to/file.json', 'processItem');
 ```
 
-Closure as callback:
+### Closure as callback:
 ```php
 $items = [];
 
@@ -76,7 +138,7 @@ $parser->parse('/path/to/file.json', function (array $item) use (&$items) {
 });
 ```
 
-Static method as callback:
+### Static method as callback:
 ```php
 class ItemProcessor {
     public static function process(array $item)
@@ -90,7 +152,7 @@ $parser = new \JsonCollectionParser\Parser();
 $parser->parse('/path/to/file.json', ['ItemProcessor', 'process']);
 ```
 
-Instance method as callback:
+### Instance method as callback:
 ```php
 class ItemProcessor {
     public function process(array $item)
@@ -105,7 +167,7 @@ $processor = new \ItemProcessor();
 $parser->parse('/path/to/file.json', [$processor, 'process']);
 ```
 
-Receive items as objects:
+### Receive items as objects:
 ```php
 function processItem(\stdClass $item)
 {
@@ -118,7 +180,7 @@ $parser = new \JsonCollectionParser\Parser();
 $parser->parseAsObjects('/path/to/file.json', 'processItem');
 ```
 
-Pass stream as parser input:
+### Pass stream as parser input:
 ```php
 $stream = fopen('/path/to/file.json', 'r');
 

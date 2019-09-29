@@ -219,4 +219,77 @@ class BasicTest extends TestCase
         $correctData = json_decode(file_get_contents($this->basicJsonFilePath), true);
         $this->assertSame($correctData, $this->items);
     }
+
+    public function testDocumentsFlow()
+    {
+        $sourcePath = TEST_DATA_PATH . '/basic_docs_flow_source.json';
+        $resultPath = TEST_DATA_PATH . '/basic_docs_flow_result.json';
+
+        $this->items = [];
+
+        $this->parser->parse(
+            $sourcePath,
+            [$this, 'processArrayItem']
+        );
+
+        $correctData = json_decode(file_get_contents($resultPath), true);
+        $this->assertSame($correctData, $this->items);
+    }
+
+    /**
+     * @dataProvider providerDocumentsFlowFromString
+     */
+    public function testDocumentsFlowFromString(string $data, array $result)
+    {
+        $this->items = [];
+
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, $data);
+        rewind($stream);
+
+        $this->parser->parse(
+            $stream,
+            [$this, 'processArrayItem']
+        );
+
+        $this->assertSame($result, $this->items);
+    }
+
+    public function providerDocumentsFlowFromString(): array
+    {
+        return [
+            [
+                '[{"a": 1}]',
+                [["a" => 1]],
+            ],
+            [
+                '{"a": 1}',
+                [["a" => 1]],
+            ],
+            [
+                '{"a": 1}{"b": 2}',
+                [["a" => 1], ["b" => 2]],
+            ],
+            [
+                '[{"a": 1}]{"b": 2}',
+                [["a" => 1], ["b" => 2]],
+            ],
+            [
+                '[[{"a": 1}]]{"b": 2}',
+                [["a" => 1], ["b" => 2]],
+            ],
+            [
+                '[{"a": 1}][{"b": 2}]',
+                [["a" => 1], ["b" => 2]],
+            ],
+            [
+                '[[{"a": 1}, {"b": 2}, {"c": 3}]]',
+                [["a" => 1], ["b" => 2], ["c" => 3]],
+            ],
+            [
+                '[{"a": 1}, {"b": 2}]{"c": 3}',
+                [["a" => 1], ["b" => 2], ["c" => 3]],
+            ],
+        ];
+    }
 }

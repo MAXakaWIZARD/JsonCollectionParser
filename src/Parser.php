@@ -1,6 +1,8 @@
 <?php
 namespace JsonCollectionParser;
 
+use JsonStreamingParser\Parser as BaseParser;
+
 class Parser
 {
     /**
@@ -12,7 +14,7 @@ class Parser
     ];
 
     /**
-     * @var \JsonStreamingParser\Parser
+     * @var BaseParser
      */
     protected $parser;
 
@@ -46,7 +48,7 @@ class Parser
 
         try {
             $listener = new Listener($itemCallback, $assoc);
-            $this->parser = new \JsonStreamingParser\Parser(
+            $this->parser = new BaseParser(
                 $stream,
                 $listener,
                 $this->getOption('line_ending'),
@@ -54,11 +56,11 @@ class Parser
             );
             $this->parser->parse();
         } catch (\Exception $e) {
-            $this->gzipSupported ? gzclose($stream) : fclose($stream);
+            $this->closeStream($stream);
             throw $e;
         }
 
-        $this->gzipSupported ? gzclose($stream) : fclose($stream);
+        $this->closeStream($stream);
     }
 
     /**
@@ -115,6 +117,19 @@ class Parser
 
         return $stream;
     }
+
+    /**
+     * @param resource $stream
+     */
+    protected function closeStream($stream)
+    {
+        if (!is_resource($stream)) {
+            return;
+        }
+
+        $this->gzipSupported ? gzclose($stream) : fclose($stream);
+    }
+
 
     /**
      * @param string $name

@@ -1,7 +1,9 @@
 <?php
 namespace JsonCollectionParser;
 
-class Listener implements \JsonStreamingParser\Listener
+use JsonStreamingParser\Listener\ListenerInterface;
+
+class Listener implements ListenerInterface
 {
     /**
      * @var array
@@ -12,11 +14,6 @@ class Listener implements \JsonStreamingParser\Listener
      * @var string
      */
     protected $key;
-
-    /**
-     * @var array
-     */
-    protected $keys;
 
     /**
      * @var int
@@ -53,48 +50,46 @@ class Listener implements \JsonStreamingParser\Listener
         $this->assoc = $assoc;
     }
 
-    public function startDocument()
+    public function startDocument(): void
     {
         $this->stack = [];
         $this->key = null;
-        $this->keys = [];
         $this->objectLevel = 0;
         $this->level = 0;
         $this->objectKeys = [];
     }
 
-    public function endDocument()
+    public function endDocument(): void
     {
         $this->stack = [];
-        $this->keys = [];
     }
 
-    public function startObject()
+    public function startObject(): void
     {
         $this->objectLevel++;
 
         $this->startCommon();
     }
 
-    public function endObject()
+    public function endObject(): void
     {
         $this->endCommon();
 
         $this->objectLevel--;
         if ($this->objectLevel === 0) {
-            $obj = $this->stack[0][0];
-            array_shift($this->stack[0]);
+            $obj = array_pop($this->stack);
+            $obj = reset($obj);
 
             call_user_func($this->callback, $obj);
         }
     }
 
-    public function startArray()
+    public function startArray(): void
     {
         $this->startCommon();
     }
 
-    public function startCommon()
+    public function startCommon(): void
     {
         $this->level++;
         $this->objectKeys[$this->level] = ($this->key) ? $this->key : null;
@@ -103,12 +98,12 @@ class Listener implements \JsonStreamingParser\Listener
         array_push($this->stack, []);
     }
 
-    public function endArray()
+    public function endArray(): void
     {
         $this->endCommon(false);
     }
 
-    public function endCommon($isObject = true)
+    public function endCommon($isObject = true): void
     {
         $obj = array_pop($this->stack);
 
@@ -120,21 +115,22 @@ class Listener implements \JsonStreamingParser\Listener
             $parentObj = array_pop($this->stack);
 
             if ($this->objectKeys[$this->level]) {
-                $parentObj[$this->objectKeys[$this->level]] = $obj;
+                $objectKey = $this->objectKeys[$this->level];
+                $parentObj[$objectKey] = $obj;
+                unset($this->objectKeys[$this->level]);
             } else {
-                array_push($parentObj, $obj);
+                $parentObj[0] = $obj;
             }
-
-            array_push($this->stack, $parentObj);
+        } else {
+            $parentObj[0] = $obj;
         }
+
+        array_push($this->stack, $parentObj);
 
         $this->level--;
     }
 
-    /**
-     * @param string $key
-     */
-    public function key($key)
+    public function key(string $key): void
     {
         $this->key = $key;
     }
@@ -142,7 +138,7 @@ class Listener implements \JsonStreamingParser\Listener
     /**
      * @param mixed $value
      */
-    public function value($value)
+    public function value($value): void
     {
         $obj = array_pop($this->stack);
 
@@ -156,10 +152,7 @@ class Listener implements \JsonStreamingParser\Listener
         array_push($this->stack, $obj);
     }
 
-    /**
-     * @param string $whitespace
-     */
-    public function whitespace($whitespace)
+    public function whitespace(string $whitespace): void
     {
     }
 }
