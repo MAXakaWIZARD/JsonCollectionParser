@@ -20,4 +20,4 @@ script:
   - if [[ "$TRAVIS_PHP_VERSION" != '7.3' ]]; then vendor/bin/phpunit ; fi
 
 after_script:
- - if [[ "$TRAVIS_PHP_VERSION" == '7.3' ]]; then php vendor/bin/coveralls -v ; fi
+ - if [[ "$TRAVIS_PHP_VERSION" == '7.3' ]]; then php vendor/bin/php-coveralls -v ; fi
