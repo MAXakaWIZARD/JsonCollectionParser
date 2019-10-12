@@ -1,7 +1,7 @@
 CHANGELOG
 =========
 
-## 1.6.0 (2019-09-30)
+## 1.6.0 (2019-10-12)
 * Add support for more input formats (documents flow)
 * Make code compliant with PSR-12
 
