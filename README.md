@@ -13,7 +13,7 @@
 Event-based parser for large JSON collections (consumes small amount of memory).
 Built on top of [JSON Streaming Parser](https://github.com/salsify/jsonstreamingparser)
 
-This package is compliant with [PSR-4](http://www.php-fig.org/psr/4/), [PSR-1](http://www.php-fig.org/psr/1/), and [PSR-2](http://www.php-fig.org/psr/2/).
+This package is compliant with [PSR-4](https://www.php-fig.org/psr/psr-4/) and [PSR-12](https://www.php-fig.org/psr/psr-12/).
 If you notice compliance oversights, please send a patch via pull request.
 
 ## Installation

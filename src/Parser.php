@@ -1,4 +1,5 @@
 <?php
+
 namespace JsonCollectionParser;
 
 use JsonStreamingParser\Parser as BaseParser;
@@ -10,7 +11,7 @@ class Parser
      */
     protected $options = [
         'line_ending' => "\n",
-        'emit_whitespace' => false
+        'emit_whitespace' => false,
     ];
 
     /**
@@ -129,7 +130,6 @@ class Parser
 
         $this->gzipSupported ? gzclose($stream) : fclose($stream);
     }
-
 
     /**
      * @param string $name

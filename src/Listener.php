@@ -1,4 +1,5 @@
 <?php
+
 namespace JsonCollectionParser;
 
 use JsonStreamingParser\Listener\ListenerInterface;
