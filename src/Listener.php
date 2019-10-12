@@ -123,7 +123,7 @@ class Listener implements ListenerInterface
                 $parentObj[0] = $obj;
             }
         } else {
-            $parentObj[0] = $obj;
+            $parentObj = [$obj];
         }
 
         array_push($this->stack, $parentObj);
