@@ -120,7 +120,7 @@ class Listener implements ListenerInterface
                 $parentObj[$objectKey] = $obj;
                 unset($this->objectKeys[$this->level]);
             } else {
-                $parentObj[0] = $obj;
+                $parentObj[] = $obj;
             }
         } else {
             $parentObj = [$obj];
