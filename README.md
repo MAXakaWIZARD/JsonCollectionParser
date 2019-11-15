@@ -40,7 +40,17 @@ Data must be in one of following formats:
         "photos": [
             "1.jpg",
             "2.jpg"
-        ]
+        ],
+        "agents": [
+            {
+                "name": "Joe",
+                "email": "joe@realestate.email"
+            },
+            {
+                "name": "Sally",
+                "email": "sally@realestate.email"
+            }
+         ]
     },
     {
         "id": 729,
