@@ -23,6 +23,19 @@ class DataStreamTest extends TestCase
     /**
      * @throws ReflectionException
      */
+    public function testFailsToParseUnsupportedType()
+    {
+        $this->expectException(StreamException::class);
+        $this->expectExceptionMessage(
+            'Unable to create a stream from given input, must be one of [`object`, `resource`, `string`].'
+        );
+
+        DataStream::get([]);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
     public function testFailsToParseUnsupportedObjectType()
     {
         $objectMethod = self::getProtectedMethod('object');
@@ -32,6 +45,20 @@ class DataStreamTest extends TestCase
         $this->expectExceptionMessage(
             'Unable to create stream from `stdClass`, must be one of `MessageInterface` or `StreamInterface`.'
         );
+
+        $objectMethod->invokeArgs($dataStream, [new stdClass()]);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function testFailsToParseInvalidResource()
+    {
+        $objectMethod = self::getProtectedMethod('resource');
+        $dataStream = new DataStream();
+
+        $this->expectException(StreamException::class);
+        $this->expectExceptionMessage('Invalid resource: unable to create stream.');
 
         $objectMethod->invokeArgs($dataStream, [new stdClass()]);
     }
