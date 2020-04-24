@@ -31,14 +31,16 @@ class DataStream
 
     /**
      * @param resource $stream
+     *
+     * @return bool|null
      */
-    public static function close($stream): void
+    public static function close($stream): ?bool
     {
         if (!is_resource($stream)) {
-            return;
+            return null;
         }
 
-        extension_loaded('zlib') ? gzclose($stream) : fclose($stream);
+        return extension_loaded('zlib') ? gzclose($stream) : fclose($stream);
     }
 
     /**
