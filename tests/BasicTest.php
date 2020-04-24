@@ -112,35 +112,6 @@ class BasicTest extends TestCase
         $this->assertEquals($correctData, $this->items);
     }
 
-    public function testCanParseMessageInterface()
-    {
-        $message = Mockery::mock(
-            MessageInterface::class,
-            [
-                'getBody' => Mockery::mock(
-                    StreamInterface::class,
-                    ['isReadable' => true]
-                ),
-            ]
-        );
-
-        $resource = DataStream::get($message);
-
-        $this->assertTrue(is_resource($resource));
-    }
-
-    public function testCanParseStreamInterface()
-    {
-        $stream = Mockery::mock(
-            StreamInterface::class,
-            ['isReadable' => true]
-        );
-
-        $resource = DataStream::get($stream);
-
-        $this->assertTrue(is_resource($resource));
-    }
-
     /**
      * @param array $item
      */
