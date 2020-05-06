@@ -59,7 +59,7 @@ class Parser
      *
      * @throws Exception
      */
-    public function chunk(int $size, $input, $itemCallback, bool $assoc = true): void
+    public function chunk($input, $itemCallback, int $size, bool $assoc = true): void
     {
         $this->checkCallback($itemCallback);
 
@@ -86,7 +86,7 @@ class Parser
      */
     public function chunkAsObjects(int $size, $input, $itemCallback): void
     {
-        $this->chunk($size, $input, $itemCallback, false);
+        $this->chunk($input, $itemCallback, $size, false);
     }
 
     public function stop(): void

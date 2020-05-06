@@ -206,7 +206,7 @@ function processChunk(array $chunk)
 }
 
 $parser = new \JsonCollectionParser\Parser();
-$parser->chunk(5, '/path/to/file.json', 'processChunk');
+$parser->chunk('/path/to/file.json', 'processChunk', 5);
 ```
 
 ### Receive chunks of items as objects:
