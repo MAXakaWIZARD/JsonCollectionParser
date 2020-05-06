@@ -2,7 +2,11 @@
 namespace JsonCollectionParser\Tests;
 
 use JsonCollectionParser\Parser;
+use JsonCollectionParser\Stream\DataStream;
+use Mockery;
 use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\MessageInterface;
+use Psr\Http\Message\StreamInterface;
 
 /**
  *
@@ -24,9 +28,20 @@ class BasicTest extends TestCase
      */
     protected $basicJsonFilePath;
 
+    /**
+     * @var string
+     */
+    protected $chunkJsonFilePath;
+
+    /**
+     * @var int
+     */
+    protected $chunkSize = 5;
+
     public function setUp()
     {
         $this->basicJsonFilePath = TEST_DATA_PATH . '/basic.json';
+        $this->chunkJsonFilePath = TEST_DATA_PATH . '/chunk.json';
 
         $this->parser = new Parser();
         $this->parser->setOption('emit_whitespace', true);
@@ -34,6 +49,8 @@ class BasicTest extends TestCase
 
     public function tearDown()
     {
+        Mockery::close();
+
         $filePath = TEST_DATA_PATH . '/non_readable.json';
         if (file_exists($filePath)) {
             @chmod($filePath, 0664);
@@ -54,17 +71,44 @@ class BasicTest extends TestCase
         $this->assertSame($correctData, $this->items);
     }
 
+    public function testGeneralChunk()
+    {
+        $this->items = [];
+
+        $this->parser->chunk(
+            $this->chunkJsonFilePath,
+            [$this, 'processArrayChunk'],
+            $this->chunkSize
+        );
+
+        $correctData = json_decode(file_get_contents($this->chunkJsonFilePath), true);
+        $this->assertSame($correctData, $this->items);
+    }
+
     public function testReceiveAsObjects()
     {
         $this->items = [];
 
-        $this->parser->parse(
+        $this->parser->parseAsObjects(
             $this->basicJsonFilePath,
-            [$this, 'processObjectItem'],
-            false
+            [$this, 'processObjectItem']
         );
 
         $correctData = json_decode(file_get_contents($this->basicJsonFilePath));
+        $this->assertEquals($correctData, $this->items);
+    }
+
+    public function testReceiveAsObjectChunks()
+    {
+        $this->items = [];
+
+        $this->parser->chunkAsObjects(
+            $this->chunkSize,
+            $this->chunkJsonFilePath,
+            [$this, 'processObjectChunk']
+        );
+
+        $correctData = json_decode(file_get_contents($this->chunkJsonFilePath));
         $this->assertEquals($correctData, $this->items);
     }
 
@@ -75,6 +119,24 @@ class BasicTest extends TestCase
     {
         $this->assertTrue(is_array($item), 'Item is expected as associative array');
         $this->items[] = $item;
+    }
+
+    /**
+     * @param array $chunk
+     */
+    public function processArrayChunk($chunk)
+    {
+        $this->assertTrue(is_array($chunk), 'Chunk is expected as array of items');
+        $this->assertTrue(
+            count($chunk) === $this->chunkSize,
+            'Chunk is expected to contain ' . $this->chunkSize . ' items.'
+        );
+
+        foreach ($chunk as $item) {
+            $this->assertTrue(is_array($item), 'Item is expected as associative array');
+        }
+
+        $this->items = array_merge($this->items, $chunk);
     }
 
     /**
@@ -92,6 +154,24 @@ class BasicTest extends TestCase
     {
         $this->assertTrue(is_object($item), 'Item is expected as object');
         $this->items[] = $item;
+    }
+
+    /**
+     * @param array $chunk
+     */
+    public function processObjectChunk($chunk)
+    {
+        $this->assertTrue(is_array($chunk), 'Chunk is expected as array of items');
+        $this->assertTrue(
+            count($chunk) === $this->chunkSize,
+            'Chunk is expected to contain ' . $this->chunkSize . ' items.'
+        );
+
+        foreach ($chunk as $item) {
+            $this->assertTrue(is_object($item), 'Item is expected as object');
+        }
+
+        $this->items = array_merge($this->items, $chunk);
     }
 
     public function testWithStop()
@@ -131,7 +211,7 @@ class BasicTest extends TestCase
     {
         $filePath = TEST_DATA_PATH . '/not_exists.json';
 
-        $this->expectExceptionMessage('File does not exist: ' . $filePath);
+        $this->expectExceptionMessage('File does not exist: `' . $filePath . '`.');
 
         $this->parser->parse(
             $filePath,
@@ -146,7 +226,7 @@ class BasicTest extends TestCase
         $this->assertFileExists($filePath);
         chmod($filePath, 0000);
 
-        $this->expectExceptionMessage('Unable to open file for read: ' . $filePath);
+        $this->expectExceptionMessage('Unable to open file for reading: `' . $filePath . '`.');
 
         $this->parser->parse(
             $filePath,

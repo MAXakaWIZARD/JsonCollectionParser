@@ -1,0 +1,104 @@
+[
+  {
+    "id": 78,
+    "title": "Title",
+    "dealType": "sale",
+    "propertyType": "townhouse",
+    "properties": {
+      "bedroomsCount": 6,
+      "parking": "yes"
+    },
+    "photos": [
+      "1.jpg",
+      "2.jpg"
+    ]
+  },
+  {
+    "id": 729,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5165,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  },
+  {
+    "id": 728,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5164,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  },
+  {
+    "id": 77,
+    "title": "Title",
+    "dealType": "sale",
+    "propertyType": "townhouse",
+    "properties": {
+      "bedroomsCount": 6,
+      "parking": "yes"
+    },
+    "photos": [
+      "1.jpg",
+      "2.jpg"
+    ]
+  },
+  {
+    "id": 727,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5163,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  },
+  {
+    "id": 726,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5162,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  },
+  {
+    "id": 76,
+    "title": "Title",
+    "dealType": "sale",
+    "propertyType": "townhouse",
+    "properties": {
+      "bedroomsCount": 6,
+      "parking": "yes"
+    },
+    "photos": [
+      "1.jpg",
+      "2.jpg"
+    ]
+  },
+  {
+    "id": 725,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5161,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  },
+  {
+    "id": 724,
+    "dealType": "rent_long",
+    "propertyType": "villa"
+  },
+  {
+    "id": 5160,
+    "dealType": "rent_short",
+    "propertyType": "villa"
+  }
+]

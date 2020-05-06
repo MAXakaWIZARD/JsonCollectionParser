@@ -13,7 +13,8 @@
 Event-based parser for large JSON collections (consumes small amount of memory).
 Built on top of [JSON Streaming Parser](https://github.com/salsify/jsonstreamingparser)
 
-This package is compliant with [PSR-4](https://www.php-fig.org/psr/psr-4/) and [PSR-12](https://www.php-fig.org/psr/psr-12/).
+This package is compliant with [PSR-4](https://www.php-fig.org/psr/psr-4/) and [PSR-12](https://www.php-fig.org/psr/psr-12/) code styles
+and supports parsing of [PSR-7](https://www.php-fig.org/psr/psr-7/) message interfaces.
 If you notice compliance oversights, please send a patch via pull request.
 
 ## Installation
@@ -190,6 +191,42 @@ $parser = new \JsonCollectionParser\Parser();
 $parser->parseAsObjects('/path/to/file.json', 'processItem');
 ```
 
+### Receive chunks of items as arrays:
+```php
+function processChunk(array $chunk)
+{
+    is_array($chunk);    //true
+    count($chunk) === 5; //true
+
+    foreach ($chunk as $item) {
+        is_array($item);  //true
+        is_object($item); //false
+        print_r($item);
+    }
+}
+
+$parser = new \JsonCollectionParser\Parser();
+$parser->chunk('/path/to/file.json', 'processChunk', 5);
+```
+
+### Receive chunks of items as objects:
+```php
+function processChunk(array $chunk)
+{
+    is_array($chunk);    //true
+    count($chunk) === 5; //true
+
+    foreach ($chunk as $item) {
+        is_array($item);  //false
+        is_object($item); //true
+        print_r($item);
+    }
+}
+
+$parser = new \JsonCollectionParser\Parser();
+$parser->chunkAsObjects(5, '/path/to/file.json', 'processChunk');
+```
+
 ### Pass stream as parser input:
 ```php
 $stream = fopen('/path/to/file.json', 'r');
@@ -198,9 +235,26 @@ $parser = new \JsonCollectionParser\Parser();
 $parser->parseAsObjects($stream, 'processItem');
 ```
 
-## Supported file formats
+### Pass [PSR-7](https://www.php-fig.org/psr/psr-7/) MessageInterface as parser input:
+```php
+$resource = $httpClient->get('https://httpbin.org/get');
 
-* `.json` - raw JSON format
+$parser = new \JsonCollectionParser\Parser();
+$parser->parseAsObjects($resource, 'processItem');
+```
+
+### Pass [PSR-7](https://www.php-fig.org/psr/psr-7/) StreamInterface as parser input:
+```php
+$resource = $httpClient->get('https://httpbin.org/get');
+
+$parser = new \JsonCollectionParser\Parser();
+$parser->parseAsObjects($resource->getBody(), 'processItem');
+```
+
+## Supported formats
+
+* [PSR-7](https://www.php-fig.org/psr/psr-7/) - HTTP message interface
+* `.json` - raw JSON file
 * `.gz` - GZIP-compressed file (you will need `zlib` PHP extension installed)
 
 ## Running tests
