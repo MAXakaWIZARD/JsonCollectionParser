@@ -78,13 +78,13 @@ class Parser
     }
 
     /**
-     * @param int               $size         Size of the chunk to collect before processing
      * @param string|resource   $input        File path or resource
      * @param callback|callable $itemCallback Callback
+     * @param int               $size         Size of the chunk to collect before processing
      *
      * @throws Exception
      */
-    public function chunkAsObjects(int $size, $input, $itemCallback): void
+    public function chunkAsObjects($input, $itemCallback, int $size): void
     {
         $this->chunk($input, $itemCallback, $size, false);
     }

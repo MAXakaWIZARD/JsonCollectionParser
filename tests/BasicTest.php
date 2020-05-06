@@ -103,9 +103,9 @@ class BasicTest extends TestCase
         $this->items = [];
 
         $this->parser->chunkAsObjects(
-            $this->chunkSize,
             $this->chunkJsonFilePath,
-            [$this, 'processObjectChunk']
+            [$this, 'processObjectChunk'],
+            $this->chunkSize
         );
 
         $correctData = json_decode(file_get_contents($this->chunkJsonFilePath));

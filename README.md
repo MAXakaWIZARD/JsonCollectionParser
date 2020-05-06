@@ -224,7 +224,7 @@ function processChunk(array $chunk)
 }
 
 $parser = new \JsonCollectionParser\Parser();
-$parser->chunkAsObjects(5, '/path/to/file.json', 'processChunk');
+$parser->chunkAsObjects('/path/to/file.json', 'processChunk', 5);
 ```
 
 ### Pass stream as parser input:
