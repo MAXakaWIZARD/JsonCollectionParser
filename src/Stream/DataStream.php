@@ -44,6 +44,8 @@ class DataStream
     }
 
     /**
+     * Handler for resource input type
+     *
      * @param mixed $input
      *
      * @throws StreamException
@@ -60,6 +62,8 @@ class DataStream
     }
 
     /**
+     * Handler for string input type
+     *
      * @param string $input
      *
      * @throws StreamException
@@ -82,6 +86,8 @@ class DataStream
     }
 
     /**
+     * Handler for object input type
+     *
      * @param MessageInterface|StreamInterface $object
      *
      * @throws StreamException

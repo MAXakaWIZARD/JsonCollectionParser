@@ -1,8 +1,12 @@
 CHANGELOG
 =========
 
+## 1.7.0 (2020-05-06)
+* Add chunking support
+* Add PSR-7 Http Message interface support
+
 ## 1.6.1 (2019-11-15)
-* Fix issue with nested arrays of objects 
+* Fix issue with nested arrays of objects
 
 ## 1.6.0 (2019-10-12)
 * Add support for more input formats (documents flow)

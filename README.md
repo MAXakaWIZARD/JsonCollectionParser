@@ -237,6 +237,9 @@ $parser->parseAsObjects($stream, 'processItem');
 
 ### Pass [PSR-7](https://www.php-fig.org/psr/psr-7/) MessageInterface as parser input:
 ```php
+use Psr\Http\Message\MessageInterface;
+
+/** @var MessageInterface $resource */
 $resource = $httpClient->get('https://httpbin.org/get');
 
 $parser = new \JsonCollectionParser\Parser();
@@ -245,6 +248,9 @@ $parser->parseAsObjects($resource, 'processItem');
 
 ### Pass [PSR-7](https://www.php-fig.org/psr/psr-7/) StreamInterface as parser input:
 ```php
+use Psr\Http\Message\MessageInterface;
+
+/** @var MessageInterface $resource */
 $resource = $httpClient->get('https://httpbin.org/get');
 
 $parser = new \JsonCollectionParser\Parser();
@@ -253,9 +259,15 @@ $parser->parseAsObjects($resource->getBody(), 'processItem');
 
 ## Supported formats
 
-* [PSR-7](https://www.php-fig.org/psr/psr-7/) - HTTP message interface
-* `.json` - raw JSON file
-* `.gz` - GZIP-compressed file (you will need `zlib` PHP extension installed)
+* `.json` - raw JSON
+* `.gz` - GZIP-compressed JSON (you will need `zlib` PHP extension installed)
+
+## Supported sources
+
+* file
+* string
+* stream / resource
+* HTTP message interface [PSR-7](https://www.php-fig.org/psr/psr-7/)
 
 ## Running tests
 ```bash
