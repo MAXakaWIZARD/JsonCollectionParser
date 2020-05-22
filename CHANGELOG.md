@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.8.0 (2020-05-22)
+* Add support for PHP 8.0
+
 ## 1.7.0 (2020-05-06)
 * Add chunking support
 * Add PSR-7 Http Message interface support
