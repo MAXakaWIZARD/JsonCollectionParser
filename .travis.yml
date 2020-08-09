@@ -8,17 +8,20 @@ php:
   - nightly
 
 matrix:
-    allow_failures:
-        - php: nightly
+  allow_failures:
+    - php: nightly
 
 before_script:
-  - composer install -n
+  - echo $TRAVIS_PHP_VERSION
+  - php -v
+  - PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION ;")
+  - echo $PHP_VERSION
+  - composer i -n -o -q --no-suggest
 
 script:
-  - php -v
   - mkdir -p build/logs
-  - if [[ "$TRAVIS_PHP_VERSION" == '7.4' ]]; then vendor/bin/phpunit --coverage-clover build/logs/clover.xml ; fi
-  - if [[ "$TRAVIS_PHP_VERSION" != '7.4' ]]; then vendor/bin/phpunit ; fi
+  - if [[ "$PHP_VERSION" == '7.4' ]]; then vendor/bin/phpunit --coverage-clover build/logs/clover.xml ; fi
+  - if [[ "$PHP_VERSION" != '7.4' ]]; then vendor/bin/phpunit ; fi
 
 after_script:
- - if [[ "$TRAVIS_PHP_VERSION" == '7.4' ]]; then php vendor/bin/php-coveralls -v ; fi
+ - if [[ "$PHP_VERSION" == '7.4' ]]; then php vendor/bin/php-coveralls -v ; fi
