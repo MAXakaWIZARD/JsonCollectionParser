@@ -38,7 +38,7 @@ class BasicTest extends TestCase
      */
     protected $chunkSize = 5;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->basicJsonFilePath = TEST_DATA_PATH . '/basic.json';
         $this->chunkJsonFilePath = TEST_DATA_PATH . '/chunk.json';
@@ -47,7 +47,7 @@ class BasicTest extends TestCase
         $this->parser->setOption('emit_whitespace', true);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         Mockery::close();
 

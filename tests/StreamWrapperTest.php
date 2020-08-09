@@ -10,7 +10,7 @@ use stdClass;
 
 class StreamWrapperTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         if (in_array(StreamWrapper::NAME, stream_get_wrappers())) {
             return;
@@ -19,7 +19,7 @@ class StreamWrapperTest extends TestCase
         stream_wrapper_register(StreamWrapper::NAME, StreamWrapper::class);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         if (in_array(StreamWrapper::NAME, stream_get_wrappers())) {
             stream_wrapper_unregister(StreamWrapper::NAME);
