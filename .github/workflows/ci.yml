@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+    cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+
+  tests:
+    name: Tests
+
+    env:
+      extensions: mbstring
+
+    strategy:
+      matrix:
+        include:
+          - php: '7.1'
+          - php: '7.2'
+          - php: '7.3'
+          - php: '7.4'
+            coverage: yes
+          - php: '8.0'
+          - php: '8.1'
+      fail-fast: false
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          coverage: "xdebug"
+          ini-values: date.timezone=Europe/Kiev,memory_limit=-1,default_socket_timeout=10,session.gc_probability=0,apc.enable_cli=1,zend.assertions=1
+          php-version: "${{ matrix.php }}"
+          extensions: "${{ env.extensions }}"
+
+      - name: Configure environment
+        run: |
+          php -v
+          PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION ;")
+          echo $PHP_VERSION
+          mkdir -p build/logs
+
+      - name: Install dependencies
+        run: |
+          composer install -o -q --no-suggest
+
+      - name: Run phpcs and phpunit
+        if: "matrix.coverage != 'yes'"
+        run: |
+          composer phpcs
+          vendor/bin/phpunit
+
+      - name: Run phpunit with coverage report
+        if: "matrix.coverage == 'yes'"
+        run: |
+          vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+      - name: Send coverage
+        if: "matrix.coverage == 'yes'"
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COVERALLS_PARALLEL: true
+          COVERALLS_FLAG_NAME: "PHP ${{ matrix.php }}"
+        run: |
+          composer require "php-coveralls/php-coveralls:~2.5"
+          php vendor/bin/php-coveralls -v
+          curl -k https://coveralls.io/webhook?repo_token=${{ secrets.GITHUB_TOKEN }} -d "repo_name=$GITHUB_REPOSITORY&payload[build_num]=$GITHUB_RUN_ID&payload[status]=done"
+
