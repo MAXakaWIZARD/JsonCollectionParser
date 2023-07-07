@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+## 1.9.1 (2023-07-07)
+* Add test runs for PHP 8.2
+
 ## 1.9.0 (2022-07-13)
 * Migrate from Travis to Github Actions
 * Add test runs for PHP 8.1
