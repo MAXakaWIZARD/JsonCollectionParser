@@ -29,9 +29,9 @@ jobs:
           - php: '7.1'
           - php: '7.2'
           - php: '7.3'
-            deps: low
           - php: '7.4'
             coverage: yes
+            deps: low
           - php: '8.0'
           - php: '8.1'
           - php: '8.2'
@@ -53,6 +53,7 @@ jobs:
           ini-values: date.timezone=Europe/Kiev,memory_limit=-1,default_socket_timeout=10,session.gc_probability=0,apc.enable_cli=1,zend.assertions=1
           php-version: "${{ matrix.php }}"
           extensions: "${{ env.extensions }}"
+          tools: composer:v2
 
       - name: Configure environment
         run: |
