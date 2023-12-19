@@ -11,6 +11,7 @@ use Psr\Http\Message\StreamInterface;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use ReflectionNamedType;
 use stdClass;
 
 class DataStreamTest extends TestCase
@@ -68,6 +69,12 @@ class DataStreamTest extends TestCase
      */
     public function testFailsToParseObjectTypeWithInvalidStreamInterface()
     {
+        $class = new ReflectionClass(MessageInterface::class);
+        $method = $class->getMethod('getBody');
+        if ($method->getReturnType() instanceof ReflectionNamedType) {
+            $this->markTestSkipped('psr/message 2.0 has strictly typed getBody method');
+        }
+
         $objectMethod = self::getProtectedMethod('object');
         $dataStream = new DataStream();
 
@@ -91,7 +98,6 @@ class DataStreamTest extends TestCase
      */
     public function testFailsToParseUnreadableStreamType()
     {
-
         $objectMethod = self::getProtectedMethod('streamWrapper');
         $dataStream = new DataStream();
 
@@ -139,7 +145,7 @@ class DataStreamTest extends TestCase
     {
         $this->expectException(StreamException::class);
 
-        $resource = DataStream::get(new stdClass());
+        DataStream::get(new stdClass());
     }
 
     public function testCanCloseStream()

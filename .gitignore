@@ -3,3 +3,5 @@ composer.lock
 *.phar
 build
 phpunit.xml
+.phpunit.result.cache
+tests/data/_*

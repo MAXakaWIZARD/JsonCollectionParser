@@ -29,6 +29,7 @@ jobs:
           - php: '7.1'
           - php: '7.2'
           - php: '7.3'
+            deps: low
           - php: '7.4'
             coverage: yes
           - php: '8.0'
@@ -61,8 +62,14 @@ jobs:
           mkdir -p build/logs
 
       - name: Install dependencies
+        if: "matrix.deps != 'low'"
         run: |
           composer install -o -q --no-suggest
+
+      - name: Install dependencies (low)
+        if: "matrix.deps == 'low'"
+        run: |
+          composer install -o -q --no-suggest --prefer-lowest
 
       - name: Run phpcs and phpunit
         if: "matrix.coverage != 'yes'"
