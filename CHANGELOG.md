@@ -4,6 +4,7 @@ CHANGELOG
 ## 1.10.0 (2023-12-19)
 * Add test runs for PHP 8.3
 * Add support for psr/http-message 2.0
+* Add lowest dependencies test run
 
 ## 1.9.1 (2023-07-07)
 * Add test runs for PHP 8.2
