@@ -30,8 +30,10 @@ jobs:
           - php: '7.2'
           - php: '7.3'
           - php: '7.4'
-            coverage: yes
             deps: low
+          - php: '7.4'
+            psr-http-message-v1: yes
+            coverage: yes
           - php: '8.0'
           - php: '8.1'
           - php: '8.2'
@@ -69,6 +71,11 @@ jobs:
         if: "matrix.deps == 'low'"
         run: |
           composer u -o -q --no-suggest --prefer-lowest
+
+      - name: Install psr/http-message v1
+        if: "psr-http-message-v1 == 'yes'"
+        run: |
+          composer u psr/http-message -o -q --no-suggest --prefer-lowest
 
       - name: Run phpcs and phpunit
         if: "matrix.coverage != 'yes'"
