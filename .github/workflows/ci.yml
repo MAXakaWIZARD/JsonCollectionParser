@@ -58,19 +58,17 @@ jobs:
       - name: Configure environment
         run: |
           php -v
-          PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION ;")
-          echo $PHP_VERSION
           mkdir -p build/logs
 
       - name: Install dependencies
         if: "matrix.deps != 'low'"
         run: |
-          composer install -o -q --no-suggest
+          composer i -o -q --no-suggest
 
       - name: Install dependencies (low)
         if: "matrix.deps == 'low'"
         run: |
-          composer install -o -q --no-suggest --prefer-lowest
+          composer u -o -q --no-suggest --prefer-lowest
 
       - name: Run phpcs and phpunit
         if: "matrix.coverage != 'yes'"
