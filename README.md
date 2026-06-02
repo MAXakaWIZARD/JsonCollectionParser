@@ -268,10 +268,5 @@ $parser->parseAsObjects($resource->getBody(), 'processItem');
 * stream / resource
 * HTTP message interface [PSR-7](https://www.php-fig.org/psr/psr-7/)
 
-## Running tests
-```bash
-composer test
-```
-
 ## License
 This library is released under [MIT](http://www.tldrlegal.com/license/mit-license) license.
