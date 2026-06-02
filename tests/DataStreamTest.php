@@ -183,7 +183,9 @@ class DataStreamTest extends TestCase
         $class  = new ReflectionClass(DataStream::class);
         $method = $class->getMethod($name);
 
-        $method->setAccessible(true);
+        if (version_compare(PHP_VERSION, '8.1.0', 'lt')) {
+            $method->setAccessible(true);            
+        }
 
         return $method;
     }
