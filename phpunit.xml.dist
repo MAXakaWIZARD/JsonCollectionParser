@@ -1,4 +1,5 @@
-<phpunit bootstrap="./tests/bootstrap.php">
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <testsuites>
         <testsuite name="JsonCollectionParser Test Suite">
             <directory>./tests</directory>
